@@ -1,4 +1,6 @@
-# Project Title
+# Bootcamp Repo
+
+## Project Title
 Exploiting Uncertainty from Public Economic Data Releases for Short-Term Arbitrage Across Different Markets
 
 **Stage:** Problem Framing & Scoping (Stage 01)
@@ -34,3 +36,48 @@ Goal → Stage → Deliverable
 - Collect & align data → Stage 02 → Clean dataset in `/data/`  
 - Event study & modeling → Stage 03 → Analysis results in `/notebooks/`  
 - Draft conclusions & present → Stage 04 → Final report and presentation in `/docs/`
+
+## Data Storage
+
+This project follows an environment-driven storage layout.
+
+### Folder Structure
+```
+data/
+  raw/        # Raw data saved as CSV (human-readable, universal format)
+  processed/  # Processed data saved as Parquet (efficient, compressed, typed)
+```
+
+### Formats
+- **CSV (in `data/raw/`)**  
+  Easy to read in any text editor or spreadsheet tool, widely compatible.  
+  Used to store raw datasets as-is.
+
+- **Parquet (in `data/processed/`)**  
+  Columnar storage format that is smaller, faster, and preserves data types better than CSV.  
+  Used for processed datasets that will be consumed by analysis and modeling code.
+
+### Environment Variables
+Storage paths are defined in `.env` for reproducibility and portability:
+
+```
+DATA_DIR_RAW=data/raw
+DATA_DIR_PROCESSED=data/processed
+```
+
+These are loaded in notebooks using `python-dotenv`:
+
+```python
+from pathlib import Path
+import os
+from dotenv import load_dotenv, find_dotenv
+
+# Load environment variables
+load_dotenv(find_dotenv())
+
+RAW_DIR = Path(os.getenv("DATA_DIR_RAW"))
+PROCESSED_DIR = Path(os.getenv("DATA_DIR_PROCESSED"))
+
+print("Raw data dir:", RAW_DIR)
+print("Processed data dir:", PROCESSED_DIR)
+```
