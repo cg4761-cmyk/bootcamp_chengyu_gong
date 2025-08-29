@@ -1,83 +1,91 @@
-# Bootcamp Repo
+# Predicting Bitcoin Price Movements Using Gold Dollar Volume Change
 
-## Project Title
-Exploiting Uncertainty from Public Economic Data Releases for Short-Term Arbitrage Across Different Markets
+## Project Overview
+This project explores whether gold market activity—measured by the change rate of *Gold Close Price × Volume* (dollar volume)—can help predict Bitcoin’s short-term price movements.  
 
-**Stage:** Problem Framing & Scoping (Stage 01)
+The study follows a simplified end-to-end ML lifecycle:
+1. Problem framing and scoping  
+2. Data acquisition and storage  
+3. Preprocessing and feature engineering  
+4. Exploratory data analysis (EDA)  
+5. Modeling (regression and classification)  
+6. Evaluation and risk communication  
+7. Results reporting  
 
-## Problem Statement
-In financial markets, major economic data releases (such as CPI, non-farm payrolls, and interest rate decisions) often trigger sharp price movements. These fluctuations may create short-term arbitrage opportunities.
+---
 
-The goal of this project is to explore whether public macroeconomic data releases create short-lived arbitrage opportunities in U.S. equities and cryptocurrency markets, and to further analyze whether, in most cases, the arbitrage direction tends to be long or short.
+## Repository Structure
+bootcamp_chengyu_gong/
+├── project/
+│ ├── data/
+│ │ ├── raw/ # Raw datasets (gold & BTC close price, volume)
+│ │ └── processed/ # Processed data (returns, dollar volume change)
+│ ├── docs/
+│ │ └── report.md # Project report with results and discussion
+│ ├── notebooks/ # Jupyter notebooks (data prep, modeling)
+│ ├── model/ # Trained models (.pkl)
+│ ├── image/ # Generated plots (confusion matrix, etc.)
+│ └── src/ # Source code scripts
+└── README.md # Project overview (this file)
 
-## Stakeholder & User
-- **Stakeholders:** Academic researchers, quantitative research teams, hedge funds, and retail investors. They are interested in whether markets are efficient and whether data releases generate tradeable opportunities in the immediate aftermath.  
-- **End Users:** Retail and institutional traders who want to know whether to adjust positions or adopt defensive strategies around data releases.
 
-## Useful Answer & Decision
-- **Descriptive:** Show typical volatility patterns in U.S. equities and cryptocurrencies around major economic data releases.  
-- **Predictive:** Explore whether different data types (e.g., CPI, employment reports) can predict short-term price direction.  
-- **Deliverable:** An event study–based analysis report with charts and conclusions, showing whether arbitrage exists and whether opportunities are more often long or short.
+---
 
-## Assumptions & Constraints
-- Historical market data is available (e.g., minute-level U.S. equity data, crypto exchange data).  
-- The release times of macroeconomic data are accurate and verifiable. 
-- In this project, ‘different markets’ refers specifically to the U.S. equity market and the cryptocurrency market.
-
-## Known Unknowns / Risks
-- High-frequency arbitrage opportunities may disappear within milliseconds, making them invisible in public datasets.  
-- The 24/7 nature of cryptocurrency markets may lead to different sensitivity and reaction patterns compared to U.S. equities.  
-- Data cleaning and synchronization (event time vs. market reaction time) may be challenging.  
-- Even when volatility is evident, it may be difficult to determine whether the arbitrage tendency is long or short.  
-
-## Lifecycle Mapping
-Goal → Stage → Deliverable  
-- Define problem → Stage 01 → README.md + stakeholder memo  
-- Collect & align data → Stage 02 → Clean dataset in `/data/`  
-- Event study & modeling → Stage 03 → Analysis results in `/notebooks/`  
-- Draft conclusions & present → Stage 04 → Final report and presentation in `/docs/`
-
-## Data Storage
-
-This project follows an environment-driven storage layout.
-
-### Folder Structure
-```
-data/
-  raw/        # Raw data saved as CSV (human-readable, universal format)
-  processed/  # Processed data saved as Parquet (efficient, compressed, typed)
+## Setup Instructions
+### 1. Clone the repository
+```bash
+git clone https://github.com/<your-username>/<your-repo>.git
+cd bootcamp_chengyu_gong
 ```
 
-### Formats
-- **CSV (in `data/raw/`)**  
-  Easy to read in any text editor or spreadsheet tool, widely compatible.  
-  Used to store raw datasets as-is.
-
-- **Parquet (in `data/processed/`)**  
-  Columnar storage format that is smaller, faster, and preserves data types better than CSV.  
-  Used for processed datasets that will be consumed by analysis and modeling code.
-
-### Environment Variables
-Storage paths are defined in `.env` for reproducibility and portability:
-
-```
-DATA_DIR_RAW=data/raw
-DATA_DIR_PROCESSED=data/processed
+### 2. Create and activate virtual environment
+```bash
+conda create -n bootcamp_env python=3.9 -y
+conda activate bootcamp_env
 ```
 
-These are loaded in notebooks using `python-dotenv`:
-
-```python
-from pathlib import Path
-import os
-from dotenv import load_dotenv, find_dotenv
-
-# Load environment variables
-load_dotenv(find_dotenv())
-
-RAW_DIR = Path(os.getenv("DATA_DIR_RAW"))
-PROCESSED_DIR = Path(os.getenv("DATA_DIR_PROCESSED"))
-
-print("Raw data dir:", RAW_DIR)
-print("Processed data dir:", PROCESSED_DIR)
+### 3. Install dependencies
+```bash
+pip install -r requirements.txt
 ```
+
+## Key Features
+- **Data Acquisition:** Yahoo Finance (`yfinance`) API  
+- **Feature Engineering:** Constructed Gold and BTC dollar volume, computed daily percentage changes  
+- **Modeling:**  
+  - Linear Regression (returns prediction)  
+  - Logistic Regression (up/down classification)  
+- **Visualization:**  
+  - Time series plots  
+  - Confusion matrix heatmap  
+
+---
+
+## Results Summary
+### Regression
+- MAE ≈ 0.024  
+- RMSE ≈ 0.034  
+- R² ≈ -0.005 (almost no explanatory power)  
+
+### Classification
+- Accuracy ≈ 52%  
+- F1 ≈ 0.68 (but degenerated to always predicting “up”)  
+
+**Conclusion:**  
+Gold dollar volume change is not a reliable standalone predictor of Bitcoin’s short-term price direction. Multi-factor approaches are required for meaningful predictive power.  
+
+---
+
+## Future Work
+- Add macroeconomic features (USD index, interest rates, VIX, etc.)  
+- Incorporate crypto-specific metrics (on-chain activity, funding rates, sentiment data)  
+- Test more advanced models (Random Forests, Gradient Boosting, LSTMs)  
+- Build a monitoring dashboard for continuous evaluation  
+
+---
+
+## Author
+**Chengyu Gong**  
+University of Washington → NYU Tandon (Financial Engineering)  
+Interested in quantitative research, financial data science, and ML applications in finance  
+
